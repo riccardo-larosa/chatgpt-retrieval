@@ -1,0 +1,398 @@
+Update a Product – Elastic Path Composable Commerce: DocsRebrand 2023We’ve launched a new visual and verbal identity. Learn more →Elastic Path Commerce CloudInteractive LearningDocsStart free trialThemesearchLog inStart free trialOpen navigationHomeCommerceComposerProduct Experience ManagerDeveloper ToolsCX StudioPaymentsChangelogAll productsPxm/Products/Products API/Update a ProductProductsProduct Experience ManagerProducts OverviewGet Started with Product Experience Manager APICurating ProductsProducts APIProducts API OverviewGet All ProductsGet a ProductCreate a ProductUpdate a ProductDelete a ProductPersonalized ProductsAssign Products to Multiple NodesDissociate Products from Multiple NodesExtending ProductsLocalesBundlesProduct VariationsProduct AssetsProduct Asset RelationshipsProduct Import/Bulk UpdateProduct ExportProducts in Commerce ManagerProducts InventoryHierarchiesCurrenciesPrice BooksCatalogsJobsIncluding ResourcesUpdate a ProductPUT Update a Producthttps://useast.api.elasticpath.com/pcm/products/:productId
+Updates the specified product.Custom names and values prefixed with $ are not supported.A 409: Conflict response is returned when a record you are updating has been changed by another user at the same time.ParametersPath parametersNameRequiredTypeDescriptionproductIdRequiredstringThe unique identifier of the product.HeadersNameRequiredTypeDescriptionAuthorizationRequiredstringThe Bearer token to grant access to the API.BodyRequired. Specify whichever attributes you want to change. The values of the other attributes remain the same. If the attributes section is empty, the product is not updated.NameRequiredTypeDescriptiontypeRequiredstringAlways: productidRequiredstringThe unique identifier of the product. Must match the product ID specified in the request path.attributes.external_refOptionalstringThe unique attribute associated with the product. This could be an external reference from a separate company system, for example. The default and maximum length is 2048 characters.attributes.nameOptionalstringThe updated product name to display to customers. Cannot be null.attributes.skuOptionalstringThe updated Stock Keeping Unit of the product. Must be unique.attributes.slugOptionalstringThe updated slug. Must be unique.attributes.commodity_typeOptionalstringValid values: physical or digitalattributes.descriptionOptionalstringThe updated description to display to customers.attributes.mpnOptionalstringThe updated Manufacturer Part Number.attributes.statusOptionalstringValid values: draft or liveattributes.upc_eanOptionalstringThe updated Universal Product Code or European Article Number.attributes.localesOptionalobjectThe product details localized in the supported languages. For example, product names or descriptions. For more information, see Products API.custom_inputsOptionalobjectThe custom text that can be added to a product. See Personalizd Products.ExamplesRequest example - update a base productcurl -X PUT https://useast.api.elasticpath.com/pcm/products/60afe403-a191-455e-b771-c510c928a308 \
+     -H "Authorization: Bearer XXXX" \
+     -H "Content-Type: application/json" \
+     -d $'{
+        "data": {
+            "type": "product",
+            "id": "60afe403-a191-455e-b771-c510c928a308",
+            "attributes": {
+                "name": "UPDATED BestEver Range, Model 1a1a"
+            }
+        }
+    }'
+Response example - update a base product200 OK{
+    "data": {
+        "type": "product",
+        "id": "60afe403-a191-455e-b771-c510c928a308",
+        "attributes": {
+            "commodity_type": "physical",
+            "description": "The 30 inch version of this popular electric range.",
+            "mpn": "BE-R-1111-aaaa-1a1a-30",
+            "name": "UPDATED BestEver Range 30 inch, Model 1a1a-30",
+            "sku": "BE-Range-1a1a-30",
+            "slug": "bestever-range-1a1a-30",
+            "status": "draft",
+            "upc_ean": "111130303030",
+            "locales": {
+                "fr-FR": {
+                    "name": "MISE À JOUR de la gamme BestEver 30 pouces, modèle 1a1a-30",
+                    "description": "La version 30 pouces de cette cuisinière électrique populaire"
+                }
+            }
+        },
+        "relationships": {
+            "files": {
+                "data": [],
+                "links": {
+                    "self": "/products/60afe403-a191-455e-b771-c510c928a308/relationships/files"
+                }
+            },
+            "templates": {
+                "data": [],
+                "links": {
+                    "self": "/products/60afe403-a191-455e-b771-c510c928a308/relationships/templates"
+                }
+            }
+        }
+    }
+}
+Request example - update a base product and build rulesThis example:Updates a base product called Shirt.Configures build rules that specify that all shirt child products are built apart from small, red, cotton shirts.This example assumes that the variations and options have already been created and associated with the base product.For more information, see:Create Child Products Using Variations and Modifiers.Build Child Products Using Variations.curl -X PUT https://useast.api.elasticpath.com/pcm/products/60afe403-a191-455e-b771-c510c928a308 \
+     -H "Authorization: Bearer XXXX" \
+     -H "Content-Type: application/json" \
+     -d $'{
+         "data": {
+         "type": "product",
+         "id": "9214719b-17fe-4ea7-896c-d61e60fc0d05",
+         "attributes": {
+            "build_rules": {
+                 "default": "include",
+                 "exclude": [
+                     [
+                         "cbde9096-e0e1-43d8-a1aa-cb66cf1d299f",
+                         "0b261f7d-753d-4af6-b9f4-62b436cca37d",
+                         "994c2029-519c-43d9-9c54-14f3af4e3efd"
+                     ]
+                 ]
+             }
+         }
+     }
+ }'
+Response example - update a base product and build rules{
+    "data": {
+        "type": "product",
+        "id": "9214719b-17fe-4ea7-896c-d61e60fc0d05",
+        "attributes": {
+            "build_rules": {
+                "default": "include",
+                "exclude": [
+                    [
+                        "cbde9096-e0e1-43d8-a1aa-cb66cf1d299f",
+                        "0b261f7d-753d-4af6-b9f4-62b436cca37d",
+                        "994c2029-519c-43d9-9c54-14f3af4e3efd"
+                    ]
+                ]
+            },
+            "commodity_type": "physical",
+            "description": "T-shirt.",
+            "locales": {
+                "fr-FR": {
+                    "name": "Shirt",
+                    "description": "T-Shirt."
+                }
+            },
+            "mpn": "1234-5678-SSSS",
+            "name": "Shirt",
+            "sku": "978055216732567",
+            "slug": "978055216732567",
+            "status": "live",
+            "upc_ean": "135623456"
+        },
+        "relationships": {
+            "children": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/children"
+                }
+            },
+            "component_products": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/component_products"
+                }
+            },
+            "files": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/files"
+                }
+            },
+            "main_image": {
+                "data": null
+            },
+            "templates": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/templates"
+                }
+            },
+            "variations": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/variations"
+                }
+            }
+        },
+        "meta": {
+            "created_at": "2022-08-18T12:14:52.782Z",
+            "owner": "store",
+            "updated_at": "2022-08-18T12:40:13.484Z",
+            "variation_matrix": {},
+            "variations": [
+                {
+                    "id": "6c4b5caa-3819-4366-a14e-c5b85009544b",
+                    "name": "Shirt Size",
+                    "options": [
+                        {
+                            "id": "cbde9096-e0e1-43d8-a1aa-cb66cf1d299f",
+                            "name": "Small",
+                            "description": "Size Small"
+                        },
+                        {
+                            "id": "da9d88d0-8ea6-434c-a0dd-059caf595687",
+                            "name": "Medium",
+                            "description": "Size Medium"
+                        },
+                        {
+                            "id": "07493fea-74b0-40a2-972a-cd7e1d6561bd",
+                            "name": "Large",
+                            "description": "Size Large"
+                        }
+                    ]
+                },
+                {
+                    "id": "b1ae545e-3375-455f-b5ea-09669b60996f",
+                    "name": "Shirt Material",
+                    "options": [
+                        {
+                            "id": "994c2029-519c-43d9-9c54-14f3af4e3efd",
+                            "name": "Cotton",
+                            "description": "Material Cotton"
+                        },
+                        {
+                            "id": "7951f3d9-f628-49f8-8a43-7749d28153d6",
+                            "name": "Denim",
+                            "description": "Material Denim"
+                        },
+                        {
+                            "id": "58115bff-589a-4287-98d8-373112102617",
+                            "name": "Wool",
+                            "description": "Material Wool"
+                        }
+                    ]
+                },
+                {
+                    "id": "f192e114-9f8a-4284-99d0-4d9ccd8a0275",
+                    "name": "Shirt Color",
+                    "options": [
+                        {
+                            "id": "0b261f7d-753d-4af6-b9f4-62b436cca37d",
+                            "name": "Red",
+                            "description": "Color Red"
+                        },
+                        {
+                            "id": "55d6d785-cc52-453a-bff6-2cf9add8a580",
+                            "name": "Green",
+                            "description": "Color Green"
+                        },
+                        {
+                            "id": "a43d8b6f-b411-49aa-adaa-36a1a025051e",
+                            "name": "Blue",
+                            "description": "Color Blue"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+Using custom_inputs AttributeYou can allow your shoppers to add custom text to a product when checking out their carts. This is useful, for example, if you have a product like a T-shirt that can be personalized. You can do this using the custom_inputs attribute when creating your products.Once you have defined your custom inputs on a product, you must configure the custom inputs in your orders. See adding your products to carts.For example, a birthday card may have custom inputs for name and message defined for a product.url -X PUT https://useast.api.elasticpath.com/pcm/products/60afe403-a191-455e-b771-c510c928a308 \
+     -H "Authorization: Bearer XXXX" \
+     -H "Content-Type: application/json" \
+     -d $'{
+  "data": {
+    "type": "product",
+    "id": "9214719b-17fe-4ea7-896c-d61e60fc0d05",
+    "attributes": {
+         "custom_inputs": {
+        "front": {
+          "name": "T-Shirt Front",
+          "validation_rules": [
+            {
+              "type": "string",
+              "options": {
+                "max_length": 50
+              }
+            }
+          ],
+          "required": false
+        },
+        "back": {
+          "name": "T-Shirt Back",
+          "validation_rules": [
+            {
+              "type": "string",
+              "options": {
+                "max_length": 50
+              }
+            }
+          ],
+          "required": false
+        }
+      }
+    }
+  }
+}'
+Response example - update custom inputs{
+    "data": {
+        "type": "product",
+        "id": "9214719b-17fe-4ea7-896c-d61e60fc0d05",
+        "attributes": {
+            "commodity_type": "physical",
+            "custom_inputs": {
+                "back": {
+                    "name": "T-Shirt Back",
+                    "validation_rules": [
+                        {
+                            "type": "string",
+                            "options": {
+                                "max_length": 50
+                            }
+                        }
+                    ],
+                    "required": false
+                },
+                "front": {
+                    "name": "T-Shirt Front",
+                    "validation_rules": [
+                        {
+                            "type": "string",
+                            "options": {
+                                "max_length": 50
+                            }
+                        }
+                    ],
+                    "required": false
+                }
+            },
+            "description": "T-shirt.",
+            "locales": {
+                "fr-FR": {
+                    "name": "T-Shirt",
+                    "description": "T-Shirt."
+                }
+            },
+            "mpn": "1234-5678-SSSS",
+            "name": "Shirt",
+            "sku": "978055216732567",
+            "slug": "978055216732567",
+            "status": "live"
+        },
+        "relationships": {
+            "children": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/children"
+                }
+            },
+            "component_products": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/component_products"
+                }
+            },
+            "files": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/files"
+                }
+            },
+            "main_image": {
+                "data": null
+            },
+            "templates": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/templates"
+                }
+            },
+            "variations": {
+                "data": [],
+                "links": {
+                    "self": "/products/9214719b-17fe-4ea7-896c-d61e60fc0d05/relationships/variations"
+                }
+            }
+        },
+        "meta": {
+            "created_at": "2022-08-18T12:14:52.782Z",
+            "updated_at": "2022-08-19T12:28:26.343Z",
+            "variation_matrix": {},
+            "variations": [
+                {
+                    "id": "6c4b5caa-3819-4366-a14e-c5b85009544b",
+                    "name": "Shirt Size",
+                    "options": [
+                        {
+                            "id": "cbde9096-e0e1-43d8-a1aa-cb66cf1d299f",
+                            "name": "Small",
+                            "description": "Size Small"
+                        },
+                        {
+                            "id": "da9d88d0-8ea6-434c-a0dd-059caf595687",
+                            "name": "Medium",
+                            "description": "Size Meduim"
+                        },
+                        {
+                            "id": "07493fea-74b0-40a2-972a-cd7e1d6561bd",
+                            "name": "Large",
+                            "description": "Size Large"
+                        }
+                    ]
+                },
+                {
+                    "id": "b1ae545e-3375-455f-b5ea-09669b60996f",
+                    "name": "Shirt Material",
+                    "options": [
+                        {
+                            "id": "994c2029-519c-43d9-9c54-14f3af4e3efd",
+                            "name": "Cotton",
+                            "description": "Material Cotton"
+                        },
+                        {
+                            "id": "7951f3d9-f628-49f8-8a43-7749d28153d6",
+                            "name": "Denim",
+                            "description": "Material Denim"
+                        },
+                        {
+                            "id": "58115bff-589a-4287-98d8-373112102617",
+                            "name": "Wool",
+                            "description": "Material Wool"
+                        }
+                    ]
+                },
+                {
+                    "id": "f192e114-9f8a-4284-99d0-4d9ccd8a0275",
+                    "name": "Shirt Color",
+                    "options": [
+                        {
+                            "id": "0b261f7d-753d-4af6-b9f4-62b436cca37d",
+                            "name": "Red",
+                            "description": "Color Red"
+                        },
+                        {
+                            "id": "55d6d785-cc52-453a-bff6-2cf9add8a580",
+                            "name": "Green",
+                            "description": "Color Green"
+                        },
+                        {
+                            "id": "a43d8b6f-b411-49aa-adaa-36a1a025051e",
+                            "name": "Blue",
+                            "description": "Color Blue"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+Related ResourcesProductsLocalesBundlesProducts APIBundles APIWas this helpful?UselessNoYesAmazingPrevious←Create a ProductNextDelete a Product→Page contentsPUT Update a ProductParametersPath parametersHeadersBodyExamplesRequest example - update a base productResponse example - update a base productRequest example - update a base product and build rulesResponse example - update a base product and build rulesUsing custom_inputs AttributeResponse example - update custom inputsRelated Resources

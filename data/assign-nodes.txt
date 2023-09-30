@@ -1,0 +1,17 @@
+Assign Products to Multiple Nodes – Elastic Path Composable Commerce: DocsRebrand 2023We’ve launched a new visual and verbal identity. Learn more →Elastic Path Commerce CloudInteractive LearningDocsStart free trialThemesearchLog inStart free trialOpen navigationHomeCommerceComposerProduct Experience ManagerDeveloper ToolsCX StudioPaymentsChangelogAll productsPxm/Products/Products API/Assign Products to Multiple NodesProductsProduct Experience ManagerProducts OverviewGet Started with Product Experience Manager APICurating ProductsProducts APIProducts API OverviewGet All ProductsGet a ProductCreate a ProductUpdate a ProductDelete a ProductPersonalized ProductsAssign Products to Multiple NodesDissociate Products from Multiple NodesExtending ProductsLocalesBundlesProduct VariationsProduct AssetsProduct Asset RelationshipsProduct Import/Bulk UpdateProduct ExportProducts in Commerce ManagerProducts InventoryHierarchiesCurrenciesPrice BooksCatalogsJobsIncluding ResourcesAssign Products to Multiple NodesPOST Attach multiple nodeshttps://useast.api.elasticpath.com/pcm/products/attach_nodes
+Assigns products to multiple hierarchies and their children nodes.Request ParametersBodyNameRequiredTypeDescriptionfilterRequiredstringFilters applied to search for appropriate products. For more details on filtering, see Filteringnode_idsRequiredstringA list of node UUIDs that you want to assign to the products.HeadersNameRequiredTypeDescriptionAuthorizationRequiredstringThe Bearer token required to get access to the API.Request ExampleThis request assigns the products that you have selected to multiple hierarchies and their children nodes.curl -X POST https://useast.api.elasticpath.com/pcm/products/attach_nodes \
+     -H "Authorization: Bearer XXXX" \
+     -H "Content-Type: application/json" \
+     -d $'{
+      "data": {
+        "filter": "eq(sku,book)",
+        "node_ids": ["123"]
+      }
+     }
+Response Example200 OK{
+    "meta": {
+         "nodes_attached": 3,
+         "nodes_not_found": []
+    }
+}'
+Response ObjectsNameDescriptionnodes_attachedNumber of nodes assigned to the products.nodes_not_foundA list of node UUIDs that could not be identified.Related ResourcesAssigning Products to Multiple NodesWas this helpful?UselessNoYesAmazingPrevious←Personalized ProductsNextDissociate Products from Multiple Nodes→Page contentsPOST Attach multiple nodesRequest ParametersBodyHeadersRequest ExampleResponse ExampleResponse ObjectsRelated Resources

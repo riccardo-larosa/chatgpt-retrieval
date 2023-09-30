@@ -1,0 +1,57 @@
+Create Child Products Using Variations and Modifiers – Elastic Path Composable Commerce: DocsRebrand 2023We’ve launched a new visual and verbal identity. Learn more →Elastic Path Commerce CloudInteractive LearningDocsStart free trialThemesearchLog inStart free trialOpen navigationHomeCommerceComposerProduct Experience ManagerDeveloper ToolsCX StudioPaymentsChangelogAll productsPxm/Products/Product Variations/Create Child Products Using VariationsProductsProduct Experience ManagerProducts OverviewGet Started with Product Experience Manager APICurating ProductsProducts APIExtending ProductsLocalesBundlesProduct VariationsOverviewProduct Variations APIProduct Variation Options APIProduct Variation Modifiers APIChild Products APIProduct Variations, Options, and Modifiers in Commerce ManagerCreate Child Products Using VariationsBuild Child Products Using VariationsProduct AssetsProduct Asset RelationshipsProduct Import/Bulk UpdateProduct ExportProducts in Commerce ManagerProducts InventoryHierarchiesCurrenciesPrice BooksCatalogsJobsIncluding ResourcesCreate Child Products Using Variations and ModifiersWith product variations in Product Experience Manager, you can create product variations and different options for each variation and use both to create child products for a product. Each child product is a unique combination of options associated with the product. This topic describes:Creating product variations and options.Building all child products. You can also build a combination of child products associated with a product, based on build rules that you specify. This is useful, for example, if you have a variation option that you do not sell. See Building Child Products Using Variations.Checking the status of the request to create child products.Creating Child Products for a ProductThis topic provides instructions to create child products for the product shirt with variation Shirt Size that has the options Small, Medium, and Large. This example also provides instructions to create a modifier to append the value of each option to its child product slug.Re-building child products after adding or removing a new variation changes the total number of child products that you can generate from a base product. When you rebuild the child products after updating variations associated with the base product, all existing child products that belong to a base product are deleted. New child products are created with new product IDs. However, re-building child products after adding or removing an option does not change the existing product IDs.Before you beginEnsure that you have the following:A Composable Commerce account.The client ID and client secret of your store.An access token.If you don’t have an access token, make the following request to get the access token:curl -X POST https://useast.api.elasticpath.com/oauth/access_token \
+     -d "client_id=XXXX" \
+     -d "client_secret=XXXX" \
+     -d "grant_type=client_credentials"
+Procedure - APICreate the product.Create the product variation Shirt Size using the following request:curl -X POST https://useast.api.elasticpath.com/pcm/variations \
+     -H "Authorization: Bearer XXXX" \
+     -H "Content-Type: application/json" \
+     -d $'{
+      "data": {
+          "type": "product-variation",
+          "attributes": {
+              "name": "Shirt Size"
+          }
+      }
+    }'
+This request creates the variation and returns the variation ID. Ensure that you make a note of the variation ID. For more information about creating variations, see the Create Variations section.Create the variation options. Option names can only contain A-Z, a-z, 0 to 9, hyphen, underscore, and period. Spaces or other special characters like ^, [], *, and $ are not allowed.Create the option small by making the following request:  curl -X POST https://useast.api.elasticpath.com/pcm/variations/:variationId/options \
+       -H "Authorization: Bearer XXXX" \
+       -H "Content-Type: application/json" \
+       -d $'{
+          "data": {
+              "type": "product-variation-option",
+              "attributes": {
+                  "name": "Small",
+                  "description": "Size small"
+              }
+          }
+      }'
+Replace the :variationId with variation ID generated in the response of Step 1. For more information on creating options, see the Create Options section.Repeat step 1 twice to create the options Large and Medium.To define how the child product varies from the base product, create modifiers. Modifiers related to slugs can only contain A t Z, a-z, 0 to 9, hyphen, underscore, and period. Spaces or other special characters like ^, [], *, and $ are not allowed.Create modifiers for your options as in the following example:  curl -X POST https://useast.api.elasticpath.com/pcm/variations/:variationId/options/:optionID/modifiers \
+       -H "Authorization: Bearer XXXX" \
+       -H "Content-Type: application/json" \
+       -d $'{
+          "data": {
+              "type": "product-variation-modifier",
+              "attributes": {
+                  "type": "slug_append",
+                  "value": "-small"
+              }
+           }
+      }'
+Repeat step 1 and create modifier for each option, such as -medium and -large, as required.If you do not provide modifiers for SKU and slug in an option, the default modifier sku_append is used for SKU and slug_append is used for slug. For more information about modifiers, see the Modifiers API section.To associate base product with a variation:Make the following request:curl -X POST \
+  https://useast.api.elasticpath.com/pcm/products/:productId/relationships/variations \
+  -H "Authorization: Bearer XXXX" \
+  -H 'content-type: application/json' \
+  -d '{
+     "data": [ {
+         "type": "product-variation",
+         "id": "{{variationID}}"
+      }]
+ }'
+Use ID of the base product for productId and the ID of the variation that you want to associate with the product for variationID.Associate more products with the variation as required.Build child products by making the following request:curl -X POST https://useast.api.elasticpath.com/pcm/products/:productId/build/ \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer XXXX"
+For productId, use the ID of the base product.You can also build a combination of child products associated with a product, based on build rules that you specify. This is useful, for example, if you have a variation option that you do not sell. See Building Child Products Using Variations.Procedure - Commerce ManagerFollow the instructions in the Create variations section and create the following options in the Shirt Size variation:LargeMediumSmallCreate SKU modifier and provide the following values for the append field:-large for Large option.-medium for Medium option.-small for Small option.Create a product with the name Shirt.Associate the product with the variation and build the child products by following the instructions in the Assigning variations and building child products section.View the Child Products Associated with a Base Product using APITo view all child products associated with a base product, make the following request:curl -X GET https://useast.api.elasticpath.com/pcm/products/:{{productID}}/children \
+    -H "Authorization: Bearer XXXX" \
+You can navigate through the list using the pagination query parameters, page[limit] and page[offset]. For more information, see the pagination section.Adding a Child Product to the Cart Using APITo add a product defined by a variation to a cart and checking it out, ensure that you use the child product ID. You must not use the product ID of the base product.To view the products variation relationships within the base product object, make the following request:curl -X GET https://useast.api.elasticpath.com/pcm/products/::productId \
+    -H "Authorization: Bearer XXXX" \
+Whenever you update variations, options, or modifiers associated with a product, make a request to the pcm/products/:productId/build/ endpoint to update the child products with the updated information.Related ResourcesProductsProducts APIWas this helpful?UselessNoYesAmazingPrevious←Product Variations, Options, and Modifiers in Commerce ManagerNextBuild Child Products Using Variations→Page contentsCreating Child Products for a ProductBefore you beginProcedure - APIProcedure - Commerce ManagerView the Child Products Associated with a Base Product using APIAdding a Child Product to the Cart Using APIRelated Resources
